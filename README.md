@@ -9,7 +9,7 @@
 [![GLM Powered](https://img.shields.io/badge/Powered%20by-GLM--4.7-6366f1?logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxMCIgY3k9IjEwIiByPSI4IiBmaWxsPSIjNjM2NmYxIi8+PC9zdmc+)](https://open.bigmodel.cn/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg)](https://github.com)
 
-[English](#english) · [功能特性](#-功能特性) · [快速开始](#-快速开始) · [界面预览](#-界面预览) · [技术架构](#-技术架构) · [API 文档](#-api-文档)
+**简体中文** · [English](README_EN.md)
 
 </div>
 
@@ -82,7 +82,7 @@
 
 ```bash
 # 1. 克隆仓库
-git clone https://github.com/your-username/engineering-decision-web.git
+git clone https://github.com/arvinlvc/engineering-decision-web.git
 cd engineering-decision-web
 
 # 2. 配置环境变量
@@ -331,6 +331,6 @@ engineering-decision-web/
 
 <div align="center">
 
-**Built for engineers who think across disciplines.**
+**为跨学科思维的工程师而构建**
 
 </div>
