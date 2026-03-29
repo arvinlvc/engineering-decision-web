@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Engineering Decision Web · 问答工作台</title>
+    <meta
+      name="description"
+      content="机电系统工程决策平台问答工作台，支持多专家协同分析、参数输入与结构化报告输出。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [["$", "$"], ["\\(", "\\)"]],
+          displayMath: [["$$", "$$"], ["\\[", "\\]"]]
+        },
+        chtml: { scale: 0.96 }
+      };
+    </script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <div class="topbar-brand">
+          <div class="brand-mark">ED</div>
+          <div>
+            <p class="eyebrow">Engineering Decision Web</p>
+            <h1>机电系统工程决策平台</h1>
+          </div>
+        </div>
+
+        <nav class="topbar-nav" aria-label="主导航">
+          <a class="nav-link active" href="/">问答工作台</a>
+          <a class="nav-link" href="/diagnostics.html">模型诊断</a>
+        </nav>
+
+        <div class="topbar-trust">
+          <div class="trust-pill">
+            <span class="trust-dot"></span>
+            <span>CTO Orchestrator</span>
+          </div>
+          <div class="trust-pill muted-pill">
+            <span>Motor · Structure · Gear · NVH</span>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-stack">
+        <section class="hero panel compact-hero">
+          <div class="hero-copy">
+            <p class="section-label">问答工作台</p>
+            <h2>让复杂工程问题进入可控、可追问、可落地的决策流程</h2>
+            <p class="hero-description">
+              这里是主问答页面。你输入问题和工况边界，CTO 会组织电机、结构、齿轮和 NVH 专家联合分析，并输出带公式、风险与验证路径的工程报告。
+            </p>
+          </div>
+
+          <div class="expert-strip">
+            <div class="expert-summary">
+              <span>Motor</span>
+              <strong>电磁 · 热 · 绕组</strong>
+            </div>
+            <div class="expert-summary">
+              <span>Structure</span>
+              <strong>强度 · 模态 · DFM</strong>
+            </div>
+            <div class="expert-summary">
+              <span>Gear</span>
+              <strong>啮合 · 修形 · 润滑</strong>
+            </div>
+            <div class="expert-summary">
+              <span>NVH</span>
+              <strong>激励 · 路径 · 声品质</strong>
+            </div>
+          </div>
+        </section>
+
+        <div class="workspace-grid qa-layout">
+          <section class="conversation panel">
+            <div class="conversation-head">
+              <div>
+                <p class="section-label">实时问答</p>
+                <h3>工程技术会诊台</h3>
+              </div>
+
+              <div class="header-actions">
+                <div class="status-line" id="status-line">等待问题输入</div>
+                <button class="ghost-button" id="clear-history" type="button">清除历史</button>
+              </div>
+            </div>
+
+            <div class="messages" id="messages" aria-live="polite"></div>
+
+            <form class="composer" id="composer">
+              <label class="composer-label" for="question">输入工程问题</label>
+              <textarea
+                id="question"
+                name="question"
+                rows="4"
+                placeholder="例如：在 180 N·m / 8000 rpm 工况下，一级减速器在 1250 Hz 处出现明显啸叫，外径与总重都不能增加，请给出跨齿轮、结构和 NVH 的优化路径。"
+                required
+              ></textarea>
+              <div class="composer-actions">
+                <p class="composer-tip">
+                  系统会自动将右侧参数与当前问题一起送入 CTO 调度器。清除历史后，将以全新问答重新开始。
+                </p>
+                <button id="submit-button" class="primary-button" type="submit">
+                  发起会诊
+                </button>
+              </div>
+            </form>
+          </section>
+
+          <aside class="rail-stack">
+            <section class="panel session-panel">
+              <p class="section-label">当前会话</p>
+              <div class="session-metrics">
+                <div class="metric-box">
+                  <span>轮次</span>
+                  <strong id="session-turns">0</strong>
+                </div>
+                <div class="metric-box">
+                  <span>专家答复</span>
+                  <strong id="session-responses">0</strong>
+                </div>
+              </div>
+              <p class="session-note" id="session-note">
+                当前没有历史问答，适合从一个新的工程问题开始。
+              </p>
+              <div class="action-row">
+                <button class="ghost-button" id="fill-demo" type="button">填入示例</button>
+                <button class="ghost-button" id="export-html" type="button">导出网页</button>
+                <a class="secondary-button" href="/diagnostics.html">去模型诊断</a>
+              </div>
+            </section>
+
+            <section class="panel params-panel">
+              <div class="panel-head">
+                <div>
+                  <p class="section-label">工程参数</p>
+                  <h3 class="panel-title">输入边界条件</h3>
+                </div>
+              </div>
+
+              <div class="field-grid">
+                <label class="field">
+                  <span>目标转矩</span>
+                  <input id="torque" name="torque" placeholder="例如 180 N·m" />
+                </label>
+                <label class="field">
+                  <span>目标转速</span>
+                  <input id="speed" name="speed" placeholder="例如 8000 rpm" />
+                </label>
+                <label class="field">
+                  <span>噪声频率/阶次</span>
+                  <input id="noiseFrequency" name="noiseFrequency" placeholder="例如 1250 Hz / 16.7 阶" />
+                </label>
+                <label class="field">
+                  <span>温升限制</span>
+                  <input id="temperatureRise" name="temperatureRise" placeholder="例如 < 70 C" />
+                </label>
+                <label class="field field-wide">
+                  <span>结构约束</span>
+                  <textarea id="constraints" name="constraints" rows="3" placeholder="例如 轴向空间受限，外径不可增加，整机重量上限 14 kg"></textarea>
+                </label>
+                <label class="field field-wide">
+                  <span>材料/工艺</span>
+                  <input id="materials" name="materials" placeholder="例如 20CrMnTi, ADC12 壳体, 压铸 + 精加工" />
+                </label>
+                <label class="field field-wide">
+                  <span>参考标准</span>
+                  <input id="standards" name="standards" placeholder="例如 ISO 6336, AGMA 2001, ISO 1940" />
+                </label>
+                <label class="field field-wide">
+                  <span>期望交付</span>
+                  <input id="deliverable" name="deliverable" placeholder="例如 给出风险、优化路径和试验建议" />
+                </label>
+              </div>
+            </section>
+
+            <section class="panel prompt-panel">
+              <p class="section-label">建议提问</p>
+              <div class="chip-list" id="quick-prompts">
+                <button type="button" class="chip">
+                  在 8000 rpm 下出现 1250 Hz 啸叫，如何定位主噪声源？
+                </button>
+                <button type="button" class="chip">
+                  减速器扭矩提高 18%，但外径不能增加，应该优先改哪里？
+                </button>
+                <button type="button" class="chip">
+                  电机槽极配比调整后，如何判断是否会激发壳体共振？
+                </button>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

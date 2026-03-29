@@ -1,0 +1,10 @@
+{
+  "name": "engineering-decision-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Web-based engineering knowledge Q&A system with CTO orchestration and GLM-5.1 integration.",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  }
+}

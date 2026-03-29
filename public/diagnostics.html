@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Engineering Decision Web · 模型诊断</title>
+    <meta
+      name="description"
+      content="机电系统工程决策平台模型诊断页，用于测试 GLM API 联通状态、延迟和返回结果。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [["$", "$"], ["\\(", "\\)"]],
+          displayMath: [["$$", "$$"], ["\\[", "\\]"]]
+        },
+        chtml: { scale: 0.96 }
+      };
+    </script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <div class="topbar-brand">
+          <div class="brand-mark">ED</div>
+          <div>
+            <p class="eyebrow">Engineering Decision Web</p>
+            <h1>机电系统工程决策平台</h1>
+          </div>
+        </div>
+
+        <nav class="topbar-nav" aria-label="主导航">
+          <a class="nav-link" href="/">问答工作台</a>
+          <a class="nav-link active" href="/diagnostics.html">模型诊断</a>
+        </nav>
+
+        <div class="topbar-trust">
+          <div class="trust-pill">
+            <span class="trust-dot"></span>
+            <span>API Diagnostics</span>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-stack">
+        <section class="hero panel compact-hero">
+          <div class="hero-copy">
+            <p class="section-label">模型诊断</p>
+            <h2>把接口状态、模型联通和返回质量独立出来检查</h2>
+            <p class="hero-description">
+              这一页专门用于验证模型配置是否正确，避免把问答问题和接口问题混在一起。适合检查 Base URL、模型名、延迟以及返回原文。
+            </p>
+          </div>
+        </section>
+
+        <div class="diagnostic-layout">
+          <section class="panel diagnostics-panel">
+            <div class="panel-head">
+              <div>
+                <p class="section-label">服务状态</p>
+                <h3 class="panel-title">检查 API 是否正常</h3>
+              </div>
+              <button class="ghost-button" id="refresh-health" type="button">刷新状态</button>
+            </div>
+
+            <div class="health-grid" id="health-grid">
+              <div class="health-item">
+                <span>模型</span>
+                <strong id="health-model">读取中</strong>
+              </div>
+              <div class="health-item">
+                <span>模式</span>
+                <strong id="health-mode">读取中</strong>
+              </div>
+              <div class="health-item">
+                <span>API Key</span>
+                <strong id="health-configured">读取中</strong>
+              </div>
+              <div class="health-item">
+                <span>地址</span>
+                <strong id="health-base-url">读取中</strong>
+              </div>
+            </div>
+
+            <form id="model-test-form" class="diagnostics-form">
+              <label class="field field-wide">
+                <span>测试提示词</span>
+                <textarea
+                  id="model-test-prompt"
+                  rows="4"
+                  placeholder="例如：请确认当前模型 API 是否联通，并简述这是一套工程技术问答系统。"
+                >请确认当前模型 API 是否联通，并说明这是一套 CTO + 多专家工程技术问答系统。</textarea>
+              </label>
+              <div class="composer-actions">
+                <p class="composer-tip">
+                  直接测试服务端代理到大模型接口的可用性，并返回延迟与原始结果。
+                </p>
+                <button id="run-model-test" class="primary-button" type="submit">
+                  测试模型 API
+                </button>
+              </div>
+            </form>
+
+            <div class="test-result" id="test-result">
+              <div class="empty-state compact-empty">
+                <strong>等待测试</strong>
+                点击“测试模型 API”后，这里会显示连通状态、耗时、回答摘要和原始返回。
+              </div>
+            </div>
+          </section>
+
+          <aside class="rail-stack">
+            <section class="panel session-panel">
+              <p class="section-label">推荐配置</p>
+              <div class="authority-stack">
+                <div class="authority-card">
+                  <span>Base URL</span>
+                  <strong>https://open.bigmodel.cn/api/coding/paas/v4</strong>
+                </div>
+                <div class="authority-card">
+                  <span>Model</span>
+                  <strong>GLM-4.7</strong>
+                </div>
+                <div class="authority-card">
+                  <span>适用场景</span>
+                  <strong>Coding Plan / 编码套餐</strong>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel prompt-panel">
+              <p class="section-label">排查建议</p>
+              <div class="chip-list">
+                <div class="chip static-chip">先看是否是 Mock 模式，避免误以为是真实接口。</div>
+                <div class="chip static-chip">再确认 Base URL 是否是 Coding Plan 专属地址。</div>
+                <div class="chip static-chip">最后检查模型名是否在套餐支持范围内。</div>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
