@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: engineering-decision-web
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: BIGMODEL_API_KEY
+        sync: false
+      - key: BIGMODEL_BASE_URL
+        value: https://open.bigmodel.cn/api/coding/paas/v4
+      - key: BIGMODEL_MODEL
+        value: GLM-4.7
+      - key: BIGMODEL_USE_MOCK
+        value: "0"
+      - key: NODE_VERSION
+        value: "18"
